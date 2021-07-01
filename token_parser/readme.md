@@ -6,6 +6,11 @@ always have some kind of token parser. So I decided to create this script in a m
 Usually I create a json template and then generate a batch of test data. The json will act as the body of my test items.
 While this script will provide randomized data for each instance.
 
+## Installation
+```shell
+pip install token-parser
+```
+
 ## What can this parse_token function do?
 1. Get current time
 2. Get current time (UTC)
@@ -23,7 +28,7 @@ While this script will provide randomized data for each instance.
 14. Generate uuid4 strings (unique for whole session or individual)
 
 ## Example
-Here's an example. More in the [examples folder](examples)
+Here's an example. More in the [examples folder](https://github.com/brenordv/token-parser-py/tree/master/examples)
 
 Consider the following JSON template:
 ```json
@@ -39,6 +44,8 @@ Consider the following JSON template:
 ```
 
 ```python
+from token_parser.parsers import parse_token
+
 # Helper variables with ISO8601 datetime format (utc and local)
 ISO8601_DATE_FORMAT_UTC = "%Y-%m-%dT%H:%M:%S.%fZ"
 ISO8601_DATE_FORMAT_LOCAL = ISO8601_DATE_FORMAT_UTC[:-1]
@@ -67,7 +74,7 @@ for i in range(50):
     test_item["createdAt"] = parse_token(
         f"$dateAdd({test_data_creation_start.strftime(ISO8601_DATE_FORMAT_UTC)}, {created_at_delay})")
 
-    # overriding the initial datetime, so it will be incremented each time
+    # overwriting the initial datetime, so it will be incremented each time
     test_data_creation_start = test_item["createdAt"]
     
     # adding test item to the list

@@ -10,6 +10,8 @@ While this script will provide randomized data for each instance.
 ```shell
 pip install token-parser
 ```
+You can check out this project at [PyPi](https://pypi.org/project/token-parser/).
+
 
 ## What can this parse_token function do?
 1. Get current time

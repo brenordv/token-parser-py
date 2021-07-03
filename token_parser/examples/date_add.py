@@ -3,7 +3,9 @@ from datetime import datetime
 import pytz
 
 from parsers import parse_token
-from utils import ISO8601_DATE_FORMAT_LOCAL, ISO8601_DATE_FORMAT_UTC
+
+ISO8601_DATE_FORMAT_UTC = "%Y-%m-%dT%H:%M:%S.%fZ"
+ISO8601_DATE_FORMAT_LOCAL = ISO8601_DATE_FORMAT_UTC[:-1]
 
 
 def adding_two_days_to_local_datetime():

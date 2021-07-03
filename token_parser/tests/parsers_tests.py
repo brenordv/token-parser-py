@@ -1,16 +1,15 @@
 # -*- coding: utf-8 -*-
 import unittest
-import uuid
 from datetime import datetime, timedelta
 from uuid import UUID
-
 from dateutil.relativedelta import relativedelta
 import pytz
 from parameterized import parameterized
 
 from parsers import parse_token
-from utils import ISO8601_DATE_FORMAT_UTC, ISO8601_DATE_FORMAT_LOCAL
 
+ISO8601_DATE_FORMAT_UTC = "%Y-%m-%dT%H:%M:%S.%fZ"
+ISO8601_DATE_FORMAT_LOCAL = ISO8601_DATE_FORMAT_UTC[:-1]
 DATE_ADD_REPLACE_TEST_PARAMS = [
     ["microseconds", 0], ["microseconds", 100], ["microseconds", -100], ["microseconds", 77], ["microseconds", -77],
     ["milliseconds", 0], ["milliseconds", 100], ["milliseconds", -100], ["milliseconds", 77], ["milliseconds", -77],

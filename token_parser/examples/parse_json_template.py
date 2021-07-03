@@ -4,8 +4,9 @@ from datetime import datetime
 from pprint import pprint
 
 from parsers import parse_token
-from utils import ISO8601_DATE_FORMAT_UTC
 
+ISO8601_DATE_FORMAT_UTC = "%Y-%m-%dT%H:%M:%S.%fZ"
+ISO8601_DATE_FORMAT_LOCAL = ISO8601_DATE_FORMAT_UTC[:-1]
 JSON_TEMPLATE = """{
     "id": "$inc()",
     "testSession": "$guid(true)",

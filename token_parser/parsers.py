@@ -8,26 +8,9 @@ import json
 from dateutil.relativedelta import relativedelta
 from uuid import uuid4
 
-from utils import ISO8601_DATE_FORMAT_UTC
 
-MAP = {
-    "$now()": "datetime.now()",
-    "$utcNow()": "datetime.utcnow()",
-    "$now(dt_string_ref)": "datetime(dt_string_ref)",
-    "$utcNow(dt_string_ref)": "utc datetime(dt_string_ref)",
-    "$dateAdd(dt_string_ref, {microseconds?: int, milliseconds?: int, seconds?: int, minutes?: int, hours?: int, days?: int, months?: int, weeks?: int years?: int})":
-        "date added of options parameters",
-    "$int(n)": "int(n)",
-    "$int(a, b)": "rand int a <= N <= b",
-    "$int(a, b, c, ..., x)": "a || b || c || ... || x",
-    "$float(n)": "float(n)",
-    "$float(a, b)": "rand float a <= N <= b",
-    "$float(a, b, c, ..., x)": "float: a || b || c || ... || x",
-    "$inc(incBy:int=1)": "will start counting from zero + inbBy",
-    "$dec(decBy:int=1)": "will start counting from zero - decBy",
-    "$guid(keep: bool = False)": "returns a guid string. if keep is true, will always return the same guid."
-}
-
+ISO8601_DATE_FORMAT_UTC = "%Y-%m-%dT%H:%M:%S.%fZ"
+ISO8601_DATE_FORMAT_LOCAL = ISO8601_DATE_FORMAT_UTC[:-1]
 CURRENT_INC_VALUE = 0
 DEFAULT_INC_BY_VALUE = 1
 CURRENT_DEC_VALUE = 0

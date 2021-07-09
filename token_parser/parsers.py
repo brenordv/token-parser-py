@@ -147,7 +147,7 @@ def _get_guid_(text):
 
 
 def parse_token(text: str) -> any:
-    if text is None or text.strip() == "":
+    if not isinstance(text, str) or text is None or text.strip() == "":
         return None
 
     _text = text.strip()
@@ -156,7 +156,10 @@ def parse_token(text: str) -> any:
         is_utc = _text == "$utcNow()"
         return _get_now_(now_ref=None, is_utc=is_utc)
 
-    if any(x in _text for x in ["$now(", "$utcNow("]) and _text.endswith(")"):
+    if not _text.endswith(")"):
+        return text
+
+    if any(x in _text for x in ["$now(", "$utcNow("]):
         is_utc = _text.startswith("$utcNow")
         dt_text = _text.replace("$utcNow(", "").replace("$now(", "")
         return _get_now_(
@@ -166,27 +169,27 @@ def parse_token(text: str) -> any:
             is_utc=is_utc
         )
 
-    if _text.startswith("$int(") and _text.endswith(")"):
+    if _text.startswith("$int("):
         return _get_int_(_text)
 
-    if _text.startswith("$float(") and _text.endswith(")"):
+    if _text.startswith("$float("):
         return _get_float_(_text)
 
-    if _text.startswith("$inc(") and _text.endswith(")"):
+    if _text.startswith("$inc("):
         return _get_inc_by_(_text)
 
-    if _text.startswith("$incReset(") and _text.endswith(")"):
+    if _text.startswith("$incReset("):
         _reset_inc_by_()
         return True
 
-    if _text.startswith("$dec(") and _text.endswith(")"):
+    if _text.startswith("$dec("):
         return _get_dec_by_(_text)
 
-    if _text.startswith("$decReset(") and _text.endswith(")"):
+    if _text.startswith("$decReset("):
         _reset_dec_by_()
         return True
 
-    if _text.startswith("$dateAdd(") and _text.endswith(")"):
+    if _text.startswith("$dateAdd("):
         date_add = _text.replace("$dateAdd(", "")
         date_add = date_add[:len(date_add) - 1]
         date_add_parts = _extract_date_add_params_(date_add)
@@ -196,7 +199,7 @@ def parse_token(text: str) -> any:
 
         return _get_date_added_(*date_add_parts)
 
-    if _text.startswith("$guid(") and _text.endswith(")"):
+    if _text.startswith("$guid("):
         return _get_guid_(_text)
 
     return text

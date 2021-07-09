@@ -28,8 +28,8 @@ You can check out this project at [PyPi](https://pypi.org/project/token-parser/)
 12. Generate sequential int (positive and negative): "$inc()" / "$dec()"
 13. Generate incremental (by N) int (positive and negative): "$inc(5)" / "$dec(5)"
 14. Generate uuid4 strings (unique for whole session or individual): "$guid()" / "$guid(true)"
-15. Returns next element on list. Each element will be parsed, if the second argument is present, otherwise will return the elements as strings. When reaches the end, will start again: "$next(['foo', 'bar'])" / "$next([1,2,3,4])" / "$next([1,2,3,4], int)"
-
+15. Returns next element on list. Each element will be parsed by python. When reaches the end, will start again: "$next(['foo', 'bar'])" / "$next([1,2,3,4])"
+    15.1 The argument must be unique, otherwise they will share the same sequence. 
 
 ## Example
 Here's an example. More in the [examples folder](https://github.com/brenordv/token-parser-py/tree/master/examples)
@@ -151,3 +151,7 @@ this is a very early stage project, just a few functionalities. If you find any 
 
 # TODO
 1. Make a presentable documentation.
+2. Review $now and $utcNow.
+3. Add strict_mode, to stop all processing when something goes wrong.
+4. Support nested tokens
+5. Create identifiers for $next, so you can use the same sequence at the same time in different iterations.

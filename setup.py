@@ -4,7 +4,7 @@ import pathlib
 
 here = pathlib.Path(__file__).parent.resolve()
 
-VERSION = '0.0.7'
+VERSION = '0.0.8'
 DESCRIPTION = 'String token parser'
 LONG_DESCRIPTION = here.joinpath("token_parser").joinpath("readme.md").read_text(encoding='utf-8')
 

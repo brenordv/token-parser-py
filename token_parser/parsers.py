@@ -16,6 +16,7 @@ DEFAULT_INC_BY_VALUE = 1
 CURRENT_DEC_VALUE = 0
 DEFAULT_DEC_BY_VALUE = 1
 CURRENT_GUID = None
+NEXT_MAP = {}
 
 
 def _get_now_(now_ref, is_utc: bool):
@@ -44,12 +45,12 @@ def _get_number_(required, num_type):
 
 
 def _get_int_(text) -> int:
-    required_numbers = text.replace("$int(", "").replace(")", "").split(",")
+    required_numbers = text.replace("$int(", "")[:-1].split(",")
     return _get_number_(required_numbers, int)
 
 
 def _get_float_(text) -> float:
-    required_numbers = text.replace("$float(", "").replace(")", "").split(",")
+    required_numbers = text.replace("$float(", "")[:-1].split(",")
     return _get_number_(required_numbers, float)
 
 
@@ -101,7 +102,7 @@ def _get_inc_by_(text: str) -> int:
     global CURRENT_INC_VALUE
     global DEFAULT_INC_BY_VALUE
 
-    inc_by_str = text.replace("$inc(", "").replace(")", "").strip()
+    inc_by_str = text.replace("$inc(", "")[:-1].strip()
     CURRENT_INC_VALUE += DEFAULT_INC_BY_VALUE if inc_by_str == "" else int(inc_by_str)
     return CURRENT_INC_VALUE
 
@@ -115,7 +116,7 @@ def _get_dec_by_(text: str) -> int:
     global CURRENT_DEC_VALUE
     global DEFAULT_DEC_BY_VALUE
 
-    inc_by_str = text.replace("$dec(", "").replace(")", "").strip()
+    inc_by_str = text.replace("$dec(", "")[:-1].strip()
     CURRENT_DEC_VALUE -= DEFAULT_DEC_BY_VALUE if inc_by_str == "" else int(inc_by_str)
     return CURRENT_DEC_VALUE
 
@@ -138,12 +139,42 @@ def _extract_date_add_params_(date_add):
 def _get_guid_(text):
     global CURRENT_GUID
 
-    keep_str = text.replace("$guid(", "").replace(")", "").strip()
+    keep_str = text.replace("$guid(", "")[:-1].strip()
     keep = keep_str.upper() == "TRUE"
     if keep and CURRENT_GUID is None:
         CURRENT_GUID = str(uuid4())
 
     return CURRENT_GUID if keep else str(uuid4())
+
+
+def _get_next_(text):
+    global NEXT_MAP
+    list_str = text.replace("$next(", "")[:-1].strip()
+    if len(list_str) == 0:
+        return text
+
+    if NEXT_MAP.get(list_str) is None:
+        try:
+            parsed_list = ast.literal_eval(list_str)
+        except SyntaxError:
+            return text
+
+        if len(parsed_list) == 0:
+            return text
+
+        NEXT_MAP[list_str] = {
+            "parsed": parsed_list,
+            "iter": iter(parsed_list)
+        }
+
+    try:
+        return next(NEXT_MAP[list_str]["iter"])
+    except StopIteration:
+        if len(NEXT_MAP[list_str]["parsed"]) == 0:
+            return text
+
+        NEXT_MAP[list_str]["iter"] = iter(NEXT_MAP[list_str]["parsed"])
+        return next(NEXT_MAP[list_str]["iter"])
 
 
 def parse_token(text: str) -> any:
@@ -201,6 +232,9 @@ def parse_token(text: str) -> any:
 
     if _text.startswith("$guid("):
         return _get_guid_(_text)
+
+    if _text.startswith("$next("):
+        return _get_next_(_text)
 
     return text
 

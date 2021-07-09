@@ -262,5 +262,67 @@ class TestParsersGuid(unittest.TestCase):
         self.assertEqual(1, len(set(guids)))
 
 
+class TestParsersNext(unittest.TestCase):
+    def test_parse_next_str_list(self):
+        input_list = ["Foo", "Bar"]
+
+        for input_list_item in input_list:
+            parsed = parse_token(f"$next({input_list})")
+            self.assertEqual(input_list_item, parsed)
+
+    def test_parse_next_int_list(self):
+        input_list = [1, 2, 3]
+
+        for input_list_item in input_list:
+            parsed = parse_token(f"$next({input_list})")
+            self.assertEqual(input_list_item, parsed)
+
+    def test_parse_next_float_list(self):
+        input_list = [1.1, 2.3, 3.44, 5.7]
+
+        for input_list_item in input_list:
+            parsed = parse_token(f"$next({input_list})")
+            self.assertEqual(input_list_item, parsed)
+
+    def test_parse_next_int_list_repeat(self):
+        input_list = [1, 2, 3]
+
+        test_list = input_list*100
+        for input_list_item in test_list:
+            parsed = parse_token(f"$next({input_list})")
+            self.assertEqual(input_list_item, parsed)
+
+    def test_parse_next_float_list_repeat(self):
+        input_list = [1.1, 2.3, 3.44, 5.7]
+
+        test_list = input_list*100
+        for input_list_item in test_list:
+            parsed = parse_token(f"$next({input_list})")
+            self.assertEqual(input_list_item, parsed)
+
+    def test_parse_next_string_list_repeat(self):
+        input_list = ["bacon", "zitos", "foo", "bar"]
+
+        test_list = input_list*100
+        for input_list_item in test_list:
+            parsed = parse_token(f"$next({input_list})")
+            self.assertEqual(input_list_item, parsed)
+
+    def test_parse_next_empty_list(self):
+        input_list = []
+        parsed = parse_token(f"$next({input_list})")
+        self.assertEqual("$next([])", parsed)
+
+    def test_parse_next_invalid_token(self):
+        invalid_input = "$next()"
+        parsed = parse_token(invalid_input)
+        self.assertEqual(invalid_input, parsed)
+
+    def test_parse_next_invalid_list(self):
+        invalid_input = "$next([)"
+        parsed = parse_token(invalid_input)
+        self.assertEqual(invalid_input, parsed)
+
+
 if __name__ == '__main__':
     unittest.main()

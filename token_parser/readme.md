@@ -32,7 +32,7 @@ You can check out this project at [PyPi](https://pypi.org/project/token-parser/)
     15.1 The argument must be unique, otherwise they will share the same sequence. 
 
 ## Example
-Here's an example. More in the [examples folder](https://github.com/brenordv/token-parser-py/tree/master/examples)
+Here's an example. More in the [examples folder](https://github.com/brenordv/token-parser-py/tree/master/token_parser/examples)
 
 Consider the following JSON template:
 ```json
